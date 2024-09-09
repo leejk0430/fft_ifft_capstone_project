@@ -80,11 +80,11 @@ module dma_wrapper #(
   input  [32-1:0]                     		wdma_mem_ptr      ,
   input  [32-1:0]                     		axi00_ptr0        ,
 
-// Stream from RDMA to core or FIFO if its bypass to WDMA
+// Stream from RDMA to core
   output  [64-1:0] 					   		out_r_din		 ,
   input   							   		out_r_full_n	 ,
   output   							   		out_r_write		 ,
-// Stream from core FIFO or just FIFO(if bypass) to WDMA
+// Stream from core FIFO after IFFT to WDMA
   input   [64-1:0] 					   		in_r_dout		 ,
   input   							   		in_r_empty_n	 ,
   output 							   		in_r_read		 
@@ -95,15 +95,15 @@ reg ap_start_r	= 1'b0;
 
 wire ap_start_pulse;
 
-wire  ap_start_rdma	;
-wire  ap_done_rdma	; // no use (state is connected from wdma)
-wire  ap_idle_rdma	; // no use
-wire  ap_ready_rdma	; // no use
+wire  ap_start_rdma	; // no use (we only use ap start for rdma and wdam)
+wire  ap_done_rdma	; // no use (state is connected from wdma) (done, idle, depends on WDMA not RDMA)
+wire  ap_idle_rdma	; // no use 
+wire  ap_ready_rdma	; // use (not to connect to controller but to reset rdma start pulse)
 
-wire  ap_start_wdma	;
-wire  ap_done_wdma	;
-wire  ap_idle_wdma	;
-wire  ap_ready_wdma	;
+wire  ap_start_wdma	; // no use (we only use ap start for rdma and wdam)
+wire  ap_done_wdma	; // use (connected to controller)
+wire  ap_idle_wdma	; // use (connected to controller)
+wire  ap_ready_wdma	; // use (connected to controller)
 
 // make ap_ctrl_sig
 // after power on, initial value is 0;

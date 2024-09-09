@@ -1,5 +1,4 @@
 
-//`define BYPASS_RDMA_TO_WDMA_DATA
 `timescale 1 ns / 1 ps
 // Top level of the kernel. Do not modify module name, parameters or ports.
 module dma_ip_top #(
@@ -15,7 +14,7 @@ module dma_ip_top #(
   parameter integer C_M00_AXI_USER_VALUE   = 0,
   parameter integer C_M00_AXI_PROT_VALUE   = 0,
   parameter integer C_M00_AXI_CACHE_VALUE  = 3,
-  parameter integer C_M00_AXI_ADDR_WIDTH   = 32,  // arty a-10 Address Range.
+  parameter integer C_M00_AXI_ADDR_WIDTH   = 32,  // arty z7-10 Address Range.
   parameter integer C_M00_AXI_DATA_WIDTH   = 64
 )
 (
@@ -103,7 +102,7 @@ module dma_ip_top #(
 ///////////////////////////////////////////////////////////////////////////////
 // Local Parameters
 ///////////////////////////////////////////////////////////////////////////////
-localparam C_ADDER_BIT_WIDTH = 8;
+localparam C_FFT_OUT_BIT_WIDTH = 512;
 ///////////////////////////////////////////////////////////////////////////////
 // Wires and Variables
 ///////////////////////////////////////////////////////////////////////////////
@@ -122,7 +121,7 @@ wire [32-1:0] value_to_add                  ;
 // Stream I/F TODO use core
 wire [64-1:0] out_r_din		                ;
 wire          out_r_full_n		            ;
-wire          out_r_write		            ;
+wire          out_r_write		              ;
 wire [64-1:0] in_r_dout		                ;
 wire          in_r_empty_n		            ;
 wire          in_r_read		                ;
@@ -172,7 +171,7 @@ inst_control_s_axi (
   .wdma_transfer_byte ( wdma_transfer_byte    ),
   .wdma_mem_ptr       ( wdma_mem_ptr          ),
   .axi00_ptr0         ( axi00_ptr0            ),
-  .value_to_add       ( value_to_add          )
+  .value_to_add       ( value_to_add          )           ////should change we have no value to add
 );
 
 dma_wrapper #(
@@ -236,6 +235,7 @@ u_dma_wrapper (
   .m00_axi_rid		    ( m00_axi_rid			      ),
   .m00_axi_ruser	    ( m00_axi_ruser		      ),
   .m00_axi_rresp	    ( m00_axi_rresp		      ),
+// control interface connected to axi4_lite
   .ap_start           ( ap_start              ),
   .ap_done            ( ap_done               ),
   .ap_idle            ( ap_idle               ),
@@ -254,48 +254,67 @@ u_dma_wrapper (
   .in_r_read          ( in_r_read             )
   );
 
-`ifdef BYPASS_RDMA_TO_WDMA_DATA
-sync_fifo 
-# (
-	.FIFO_IN_REG	(1),
-	.FIFO_OUT_REG	(1),
-	.FIFO_CMD_LENGTH(C_M00_AXI_DATA_WIDTH),
-	.FIFO_DEPTH     (64),
-	.FIFO_LOG2_DEPTH(6 + 1)
-) u_sync_fifo (
-	.clk			  (ap_clk),
-	.reset			(areset),
 
-	.s_valid		(out_r_write	),
-	.s_ready		(out_r_full_n	),
-	.s_data			(out_r_din		),
 
-	.m_valid		(in_r_empty_n	),
-	.m_ready		(in_r_read		),
-	.m_data			(in_r_dout		)
-);
+wire  [64-1:0] 		                  w_in_r_dout		      ;
+wire 				                        w_in_r_empty_n		  ;
+wire				                        w_in_r_read		      ;
 
-`else // If you use a core dont define BYPASS_RDMA_TO_WDMA_DATA
-// TODO
-
-wire [64-1:0] 		w_in_r_dout		                  ;
-wire 				      w_in_r_empty_n		              ;
-wire				      w_in_r_read		                  ;
+wire                                w_fft_valid         ;
+wire                                w_ifft_ready        ;
+wire  [C_FFT_OUT_BIT_WIDTH-1:0]     w_fft_to_ifft_data  ;
 	
-axis_adder #(
+axis_fft_8point_dft #(
   .C_AXIS_TDATA_WIDTH ( C_M00_AXI_DATA_WIDTH ) ,
-  .C_ADDER_BIT_WIDTH  ( C_ADDER_BIT_WIDTH  ) ,
-  .C_NUM_CLOCKS       ( 1                  )
+  .C_AXIS_TOUT_WIDTH  ( C_FFT_OUT_BIT_WIDTH  ) ,
+  .C_AXIS_TID_WIDTH   ( 1                  ) ,
+  .C_AXIS_TDEST_WIDTH ( 1                  ) ,
+  .C_AXIS_TUSER_WIDTH ( 1                  ) 
 )
-inst_adder  (
+inst_fft_8point  (
   .s_axis_aclk   ( ap_clk                   		) ,
   .s_axis_areset ( areset                   		) ,
-  .ctrl_constant ( value_to_add[C_ADDER_BIT_WIDTH-1:0]) ,
   .s_axis_tvalid ( out_r_write              		) ,
   .s_axis_tready ( out_r_full_n             		) ,
   .s_axis_tdata  ( out_r_din                		) ,
+  //unused signals
   .s_axis_tkeep	 ( 'b0								),
   .s_axis_tstrb	 ( {C_M00_AXI_DATA_WIDTH/8{1'b1}}	),
+  .s_axis_tlast	 ( 'b0								),
+  .s_axis_tid	   ( 'b0								),
+  .s_axis_tdest	 ( 'b0								),
+  .s_axis_tuser	 ( 'b0								),
+
+  .m_axis_aclk   ( ap_clk                   		),
+  .m_axis_tvalid ( w_fft_valid             	    ),
+  .m_axis_tready ( w_ifft_ready	             		),
+  .m_axis_tdata  ( w_fft_to_ifft_data           ),
+  // unused signals
+  .m_axis_tkeep	 ( 'b0								  ),
+  .m_axis_tstrb	 (  {C_FFT_OUT_BIT_WIDTH/8{1'b1}}),
+  .m_axis_tlast	 ( 'b0									),
+  .m_axis_tid	   ( 'b0									),
+  .m_axis_tdest	 ( 'b0								  ),
+  .m_axis_tuser	 ( 'b0								  )
+);
+
+
+axis_ifft_8point_dft #(
+  .C_AXIS_TDATA_WIDTH ( C_FFT_OUT_BIT_WIDTH  ) ,
+  .C_AXIS_TOUT_WIDTH  ( C_AXIS_TDATA_WIDTH   ) ,
+  .C_AXIS_TID_WIDTH   ( 1                  ) ,
+  .C_AXIS_TDEST_WIDTH ( 1                  ) ,
+  .C_AXIS_TUSER_WIDTH ( 1                  ) 
+)
+inst_ifft_8point  (
+  .s_axis_aclk   ( ap_clk                   		) ,
+  .s_axis_areset ( areset                   		) ,
+  .s_axis_tvalid ( out_r_write              		) ,
+  .s_axis_tready ( out_r_full_n             		) ,
+  .s_axis_tdata  ( out_r_din                		) ,
+  //unused signals
+  .s_axis_tkeep	 ( 'b0								),
+  .s_axis_tstrb	 ( {C_FFT_OUT_BIT_WIDTH/8{1'b1}}	),
   .s_axis_tlast	 ( 'b0								),
   .s_axis_tid	   ( 'b0								),
   .s_axis_tdest	 ( 'b0								),
@@ -306,14 +325,17 @@ inst_adder  (
   .m_axis_tready ( w_in_r_read	             		),
   .m_axis_tdata  ( w_in_r_dout                	),
   // unused signals
-  .m_axis_tkeep	 (									),
-  .m_axis_tstrb	 (									),
-  .m_axis_tlast	 (									),
-  .m_axis_tid	   (									),
-  .m_axis_tdest	 (									),
-  .m_axis_tuser	 (									)
-
+  .m_axis_tkeep	 ( 'b0								  ),
+  .m_axis_tstrb	 (  {C_M00_AXI_DATA_WIDTH/8{1'b1}}),
+  .m_axis_tlast	 ( 'b0									),
+  .m_axis_tid	   ( 'b0									),
+  .m_axis_tdest	 ( 'b0								  ),
+  .m_axis_tuser	 ( 'b0								  )
 );
+
+
+
+
 
 sync_fifo 
 # (
@@ -336,5 +358,21 @@ sync_fifo
 );
 
 
-`endif
+skid_buffer
+# (
+  .DATA_WIDTH(64)
+) u_sync_fifo(
+  .clk      (ap_clk),
+  .reset    (areset),
+
+  .s_valid  (),
+  .s_ready  (),
+  .s_data   (),
+
+  .m_valid  (),
+  .m_ready  (),
+  .m_data   ()
+);
+
+
 endmodule
