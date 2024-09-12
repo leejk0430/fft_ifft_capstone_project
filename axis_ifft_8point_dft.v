@@ -395,21 +395,21 @@ always @(*) begin
 
 //2-point DFT calculation (we only find output which are only real)
 
-    x_0_real = (r_Xee_0_real + r_Xee_1_real) >>> 3; // >>>3 for 1/N 
+    x_0_real = (r_Xee_0_real + r_Xee_1_real) >> 3; // >>8 for decimal point, >>3 for 1/N
 
-    x_4_real = (r_Xee_0_real - r_Xee_1_real) >>> 3;
+    x_4_real = (r_Xee_0_real - r_Xee_1_real) >> 3;
 
-    x_2_real = (r_Xeo_0_real - r_Xeo_1_imag) >>> 3;
+    x_2_real = (r_Xeo_0_real - r_Xeo_1_imag) >> 3;
 
-    x_6_real = (r_Xeo_0_real + r_Xeo_1_imag) >>> 3;
+    x_6_real = (r_Xeo_0_real + r_Xeo_1_imag) >> 3;
 
-    x_1_real = (r_Xoe_0_real + r_Xoe_1_real) >>> 3;
+    x_1_real = (r_Xoe_0_real + r_Xoe_1_real) >> 3;
 
-    x_5_real = (r_Xoe_0_real - r_Xoe_1_real) >>> 3;  
+    x_5_real = (r_Xoe_0_real - r_Xoe_1_real) >> 3;  
 
-    x_3_real = (r_Xoo_0_real - r_Xoo_1_imag) >>> 3; 
+    x_3_real = (r_Xoo_0_real - r_Xoo_1_imag) >> 3; 
 
-    x_7_real = (r_Xoo_0_real + r_Xoo_1_imag) >>> 3; 
+    x_7_real = (r_Xoo_0_real + r_Xoo_1_imag) >> 3; 
 
  end
 

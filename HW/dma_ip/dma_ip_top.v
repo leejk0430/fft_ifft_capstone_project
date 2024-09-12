@@ -170,8 +170,8 @@ inst_control_s_axi (
   .rdma_mem_ptr       ( rdma_mem_ptr          ),
   .wdma_transfer_byte ( wdma_transfer_byte    ),
   .wdma_mem_ptr       ( wdma_mem_ptr          ),
-  .axi00_ptr0         ( axi00_ptr0            ),
-  .value_to_add       ( value_to_add          )           ////should change we have no value to add
+  .axi00_ptr0         ( axi00_ptr0            )
+//.value_to_add       ( value_to_add          )           ////should change we have no value to add
 );
 
 dma_wrapper #(
@@ -309,9 +309,9 @@ axis_ifft_8point_dft #(
 inst_ifft_8point  (
   .s_axis_aclk   ( ap_clk                   		) ,
   .s_axis_areset ( areset                   		) ,
-  .s_axis_tvalid ( out_r_write              		) ,
-  .s_axis_tready ( out_r_full_n             		) ,
-  .s_axis_tdata  ( out_r_din                		) ,
+  .s_axis_tvalid ( w_fft_valid              		) ,
+  .s_axis_tready ( w_ifft_ready             		) ,
+  .s_axis_tdata  ( w_fft_to_ifft_data           ) ,
   //unused signals
   .s_axis_tkeep	 ( 'b0								),
   .s_axis_tstrb	 ( {C_FFT_OUT_BIT_WIDTH/8{1'b1}}	),
@@ -355,23 +355,6 @@ sync_fifo
 	.m_valid		(in_r_empty_n	),
 	.m_ready		(in_r_read		),
 	.m_data			(in_r_dout		)
-);
-
-
-skid_buffer
-# (
-  .DATA_WIDTH(64)
-) u_sync_fifo(
-  .clk      (ap_clk),
-  .reset    (areset),
-
-  .s_valid  (),
-  .s_ready  (),
-  .s_data   (),
-
-  .m_valid  (),
-  .m_ready  (),
-  .m_data   ()
 );
 
 

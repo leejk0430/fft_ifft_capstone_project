@@ -81,13 +81,13 @@ module dma_wrapper #(
   input  [32-1:0]                     		axi00_ptr0        ,
 
 // Stream from RDMA to core
-  output  [64-1:0] 					   		out_r_din		 ,
-  input   							   		out_r_full_n	 ,
-  output   							   		out_r_write		 ,
+  output  [64-1:0] 					   		out_r_din		 ,			//data
+  input   							   		out_r_full_n	 ,			//ready
+  output   							   		out_r_write		 ,			//valid
 // Stream from core FIFO after IFFT to WDMA
-  input   [64-1:0] 					   		in_r_dout		 ,
-  input   							   		in_r_empty_n	 ,
-  output 							   		in_r_read		 
+  input   [64-1:0] 					   		in_r_dout		 ,			//data
+  input   							   		in_r_empty_n	 ,			//valid
+  output 							   		in_r_read		 			//ready
 );
 
 reg areset 		= 1'b0;

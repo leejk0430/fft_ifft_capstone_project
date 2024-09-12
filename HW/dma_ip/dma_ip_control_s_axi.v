@@ -30,7 +30,7 @@ module dma_ip_control_s_axi
     output wire [31:0]                   wdma_transfer_byte,
     output wire [31:0]                   wdma_mem_ptr,
     output wire [31:0]                   axi00_ptr0,
-    output wire [31:0]                   value_to_add,
+//  output wire [31:0]                   value_to_add,          //delete
     output wire                          ap_start,
     input  wire                          ap_done,
     input  wire                          ap_ready,
@@ -67,7 +67,7 @@ module dma_ip_control_s_axi
 // 0x20 : Data signal of axi00_ptr0
 //        bit 31~0 - axi00_ptr0[31:0] (Read/Write)
 // 0x24 : value_to_add
-//        bit 31~0 - value_to_add[31:0] (Read/Write)
+//        bit 31~0 - value_to_add[31:0] (Read/Write)        //delete
 // (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
 
 //------------------------Parameter----------------------
@@ -81,7 +81,7 @@ localparam
     ADDR_WDMA_TRANSFER_BYTE_DATA_0 = 6'h18,
     ADDR_WDMA_MEM_PTR_DATA_0       = 6'h1c,
     ADDR_AXI00_PTR0_DATA_0         = 6'h20,
-    ADDR_VALUE_TO_ADD	           = 6'h24,
+//  ADDR_VALUE_TO_ADD	           = 6'h24,
     WRIDLE                         = 2'd0,
     WRDATA                         = 2'd1,
     WRRESP                         = 2'd2,
@@ -248,9 +248,9 @@ always @(posedge ACLK) begin
                 ADDR_AXI00_PTR0_DATA_0: begin
                     rdata <= int_axi00_ptr0[31:0];
 				end  
-                ADDR_VALUE_TO_ADD: begin
-                    rdata <= int_value_to_add[31:0];
-                end
+//              ADDR_VALUE_TO_ADD: begin
+//                  rdata <= int_value_to_add[31:0];
+//              end
             endcase
         end
     end
@@ -268,7 +268,7 @@ assign rdma_mem_ptr       = int_rdma_mem_ptr;
 assign wdma_transfer_byte = int_wdma_transfer_byte;
 assign wdma_mem_ptr       = int_wdma_mem_ptr;
 assign axi00_ptr0         = int_axi00_ptr0;
-assign value_to_add       = int_value_to_add;
+//assign value_to_add       = int_value_to_add;       //delete
 // int_interrupt
 always @(posedge ACLK) begin
     if (ARESET)
@@ -452,7 +452,7 @@ always @(posedge ACLK) begin
 end
 
 // int_value_to_add[31:0]
-always @(posedge ACLK) begin
+/*always @(posedge ACLK) begin
     if (ARESET)
         int_value_to_add[31:0] <= 0;
     else if (ACLK_EN) begin
@@ -460,7 +460,9 @@ always @(posedge ACLK) begin
             int_value_to_add[31:0] <= (WDATA[31:0] & wmask) | (int_value_to_add[31:0] & ~wmask);
     end
 end
+*/
 
+//delete
 
 //synthesis translate_off
 always @(posedge ACLK) begin

@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 module skid_buffer #
 (
-    parameter DATA_WIDTH = 8
+    parameter DATA_WIDTH = 64
 )
 (
     input  wire                   clk,
