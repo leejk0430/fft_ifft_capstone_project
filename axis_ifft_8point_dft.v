@@ -415,7 +415,7 @@ always @(*) begin
 
 assign m_axis_tvalid = d4_tvalid;
 assign m_axis_tdata = {r_x7_real, r_x6_real, r_x5_real, r_x4_real,
-r_x3_real, r_x2_real, r_x1_real, r_x0_real};
+		       r_x3_real, r_x2_real, r_x1_real, r_x0_real};    // need to make the output smaller and make it 64 bit
 
 
 endmodule
