@@ -11,7 +11,7 @@ module fft_8point_dft #(
   parameter integer C_AXIS_TUSER_WIDTH = 1
 )
 (
-    input wire		                            s_axis_clk,
+    input wire		                            s_axis_aclk,
     input wire		                            s_axis_areset,      
     input wire                                  s_axis_tvalid,
     output wire                                 s_axis_tready,
@@ -179,7 +179,6 @@ reg   [C_AXIS_TUSER_WIDTH-1:0]   d3_tuser;
     reg signed [31:0] X_3_temp_real, X_3_temp_imag;
     reg signed [31:0] X_5_temp_real, X_5_temp_imag;
     reg signed [31:0] X_7_temp_real, X_7_temp_imag;
-
 
 /////////////////////////////////////////////////////////////////////
 // RTL Logic

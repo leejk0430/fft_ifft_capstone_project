@@ -12,10 +12,10 @@ module ifft_8point_dft #(
     parameter integer C_AXIS_TUSER_WIDTH = 1
 )
 (
-    input 			                            s_axis_aclk,
-    input 			                            s_axis_areset,
-    input 			                            s_axis_tvalid,
-    output 			                            s_axis_tready,
+    input wire			                        s_axis_aclk,
+    input wire			                        s_axis_areset,
+    input wire			                        s_axis_tvalid,
+    output wire			                        s_axis_tready,
     input wire      [C_AXIS_TDATA_WIDTH-1:0]    s_axis_tdata,
 /////////////////no use of the following signals/////////////////////////////
     input wire      [C_AXIS_TDATA_WIDTH/8-1:0]  s_axis_tkeep,                          
@@ -25,10 +25,10 @@ module ifft_8point_dft #(
     input wire      [C_AXIS_TDEST_WIDTH-1:0]    s_axis_tdest,
     input wire      [C_AXIS_TUSER_WIDTH-1:0]    s_axis_tuser,   
 ///////////////////////////////////////////////////////////////////////////////
-    input                                       m_axis_aclk,
-    output 			                            m_axis_tvalid,
-    input 			                            m_axis_tready,
-    output wire     [C_AXIS_TOUT_WIDTH-1:0]     m_axis_tdata,
+    input   wire                                 m_axis_aclk,
+    output  wire			                     m_axis_tvalid,
+    input   wire			                     m_axis_tready,
+    output  wire     [C_AXIS_TOUT_WIDTH-1:0]     m_axis_tdata,
 /////////////////no use of the following signals/////////////////////////////
     output wire     [C_AXIS_TOUT_WIDTH/8-1:0]   m_axis_tkeep,
     output wire     [C_AXIS_TOUT_WIDTH/8-1:0]   m_axis_tstrb,
