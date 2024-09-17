@@ -436,21 +436,23 @@ always @(*) begin
 
     x_7_real = (r_Xoo_0_real + r_Xoo_1_imag) >>> 3;
 
+end
+
 //scaling the output of ifft to 8bits per data
 
-    w_x_0_real = r_x_0_real [7:0];
-    w_x_1_real = r_x_1_real [7:0];
-    w_x_2_real = r_x_2_real [7:0];
-    w_x_3_real = r_x_3_real [7:0];
-    w_x_4_real = r_x_4_real [7:0];
-    w_x_5_real = r_x_5_real [7:0];
-    w_x_6_real = r_x_6_real [7:0];
-    w_x_7_real = r_x_7_real [7:0];
+assign    w_x_0_real = r_x_0_real [7:0];
+assign    w_x_1_real = r_x_1_real [7:0];
+assign    w_x_2_real = r_x_2_real [7:0];
+assign    w_x_3_real = r_x_3_real [7:0];
+assign    w_x_4_real = r_x_4_real [7:0];
+assign    w_x_5_real = r_x_5_real [7:0];
+assign    w_x_6_real = r_x_6_real [7:0];
+assign    w_x_7_real = r_x_7_real [7:0];
 
     
 
 
- end
+
 
 assign m_axis_tvalid = d4_tvalid;
 assign m_axis_tdata = {w_x_7_real, w_x_6_real, w_x_5_real, w_x_4_real,
