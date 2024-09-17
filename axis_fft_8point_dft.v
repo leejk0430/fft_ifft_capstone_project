@@ -180,7 +180,6 @@ reg   [C_AXIS_TUSER_WIDTH-1:0]   d3_tuser;
     reg signed [31:0] X_5_temp_real, X_5_temp_imag;
     reg signed [31:0] X_7_temp_real, X_7_temp_imag;
 
-    wire signed [31:0] m_X
 
 /////////////////////////////////////////////////////////////////////
 // RTL Logic
