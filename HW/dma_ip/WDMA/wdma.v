@@ -68,7 +68,7 @@ module wdma (
 
         in_r_dout,
         in_r_empty_n,
-        in_r_read,
+        in_r_read
 
 );
 parameter    C_M_AXI_GMEM_ID_WIDTH 		= 1;
