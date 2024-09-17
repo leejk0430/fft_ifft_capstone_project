@@ -41,7 +41,6 @@ module ifft_8point_dft #(
 // variables for stream
 ////////////////////////////////////////////////////////////////////
 reg                              d1_tvalid = 1'b0;
-reg   [C_AXIS_TDATA_WIDTH-1:0]   d1_tdata;
 reg   [C_AXIS_TDATA_WIDTH/8-1:0] d1_tkeep;
 reg                              d1_tlast;
 reg   [C_AXIS_TDATA_WIDTH/8-1:0] d1_tstrb = {C_AXIS_TDATA_WIDTH/8{1'b1}};
@@ -51,7 +50,6 @@ reg   [C_AXIS_TUSER_WIDTH-1:0]   d1_tuser = {C_AXIS_TUSER_WIDTH{1'b0}};
 
 
 reg                              d2_tvalid = 1'b0;
-reg   [C_AXIS_TDATA_WIDTH-1:0]   d2_tdata;
 reg   [C_AXIS_TDATA_WIDTH/8-1:0] d2_tkeep;
 reg                              d2_tlast;
 reg   [C_AXIS_TDATA_WIDTH/8-1:0] d2_tstrb;
@@ -61,13 +59,21 @@ reg   [C_AXIS_TUSER_WIDTH-1:0]   d2_tuser;
 
 
 reg                              d3_tvalid = 1'b0;
-reg   [C_AXIS_TDATA_WIDTH-1:0]   d3_tdata;
 reg   [C_AXIS_TDATA_WIDTH/8-1:0] d3_tkeep;
 reg                              d3_tlast;
 reg   [C_AXIS_TDATA_WIDTH/8-1:0] d3_tstrb;
 reg   [C_AXIS_TID_WIDTH-1:0]     d3_tid;
 reg   [C_AXIS_TDEST_WIDTH-1:0]   d3_tdest;
 reg   [C_AXIS_TUSER_WIDTH-1:0]   d3_tuser;
+
+
+reg                              d4_tvalid = 1'b0;
+reg   [C_AXIS_TDATA_WIDTH/8-1:0] d4_tkeep;
+reg                              d4_tlast;
+reg   [C_AXIS_TDATA_WIDTH/8-1:0] d4_tstrb;
+reg   [C_AXIS_TID_WIDTH-1:0]     d4_tid;
+reg   [C_AXIS_TDEST_WIDTH-1:0]   d4_tdest;
+reg   [C_AXIS_TUSER_WIDTH-1:0]   d4_tuser;
 
 ////////////////////////////////////////////////////////////////
 // variables for core calculation 
