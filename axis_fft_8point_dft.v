@@ -14,7 +14,7 @@ module fft_8point_dft #(
     input wire		                            s_axis_clk,
     input wire		                            s_axis_areset,      
     input wire                                  s_axis_tvalid,
-    output wire                                 s_axis_tready
+    output wire                                 s_axis_tready,
     input wire      [C_AXIS_TDATA_WIDTH-1:0]    s_axis_tdata,
 /////////////////no use of the following signals/////////////////////////////
     input wire      [C_AXIS_TDATA_WIDTH/8-1:0]  s_axis_tkeep,
