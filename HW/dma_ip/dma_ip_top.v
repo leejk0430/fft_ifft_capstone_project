@@ -301,7 +301,7 @@ inst_fft_8point  (
 
 axis_ifft_8point_dft #(
   .C_AXIS_TDATA_WIDTH ( C_FFT_OUT_BIT_WIDTH  ) ,
-  .C_AXIS_TOUT_WIDTH  ( C_AXIS_TDATA_WIDTH   ) ,
+  .C_AXIS_TOUT_WIDTH  ( C_M00_AXI_DATA_WIDTH   ) ,
   .C_AXIS_TID_WIDTH   ( 1                  ) ,
   .C_AXIS_TDEST_WIDTH ( 1                  ) ,
   .C_AXIS_TUSER_WIDTH ( 1                  ) 
