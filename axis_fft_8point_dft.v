@@ -70,6 +70,15 @@ reg   [C_AXIS_TID_WIDTH-1:0]     d3_tid;
 reg   [C_AXIS_TDEST_WIDTH-1:0]   d3_tdest;
 reg   [C_AXIS_TUSER_WIDTH-1:0]   d3_tuser;
 
+reg                              d4_tvalid = 1'b0;
+reg   [C_AXIS_TDATA_WIDTH-1:0]   d4_tdata;
+reg   [C_AXIS_TDATA_WIDTH/8-1:0] d4_tkeep;
+reg                              d4_tlast;
+reg   [C_AXIS_TDATA_WIDTH/8-1:0] d4_tstrb;
+reg   [C_AXIS_TID_WIDTH-1:0]     d4_tid;
+reg   [C_AXIS_TDEST_WIDTH-1:0]   d4_tdest;
+reg   [C_AXIS_TUSER_WIDTH-1:0]   d4_tuser;
+
 
 ////////////////////////////////////////////////////////////////
 // variables for core calculation 
