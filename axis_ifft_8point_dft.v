@@ -125,21 +125,21 @@ reg   [C_AXIS_TUSER_WIDTH-1:0]   d3_tuser;
     reg signed [31:0] r_Xoo_1_imag = 'b0;
         
     reg signed [31:0] r_x_0_real = 'b0;
-    reg signed [31:0] r_x_0_imag = 'b0;
+
     reg signed [31:0] r_x_1_real = 'b0;
-    reg signed [31:0] r_x_1_imag = 'b0;
+
     reg signed [31:0] r_x_2_real = 'b0;
-    reg signed [31:0] r_x_2_imag = 'b0;
+
     reg signed [31:0] r_x_3_real = 'b0;
-    reg signed [31:0] r_x_3_imag = 'b0;
+
     reg signed [31:0] r_x_4_real = 'b0;
-    reg signed [31:0] r_x_4_imag = 'b0;
+
     reg signed [31:0] r_x_5_real = 'b0;
-    reg signed [31:0] r_x_5_imag = 'b0;
+
     reg signed [31:0] r_x_6_real = 'b0;
-    reg signed [31:0] r_x_6_imag = 'b0;
+
     reg signed [31:0] r_x_7_real = 'b0;
-    reg signed [31:0] r_x_7_imag = 'b0;
+
 
 
 
@@ -178,21 +178,40 @@ reg   [C_AXIS_TUSER_WIDTH-1:0]   d3_tuser;
     reg signed [31:0] Xoo_1_imag;
 
     reg signed [31:0] x_0_real;
-    reg signed [31:0] x_0_imag;
+
     reg signed [31:0] x_1_real;
-    reg signed [31:0] x_1_imag;
+
     reg signed [31:0] x_2_real;
-    reg signed [31:0] x_2_imag;
+
     reg signed [31:0] x_3_real;
-    reg signed [31:0] x_3_imag;
+
     reg signed [31:0] x_4_real;
-    reg signed [31:0] x_4_imag;
+
     reg signed [31:0] x_5_real;
-    reg signed [31:0] x_5_imag;
+
     reg signed [31:0] x_6_real;
-    reg signed [31:0] x_6_imag;
+
     reg signed [31:0] x_7_real;
-    reg signed [31:0] x_7_imag;
+
+
+
+
+
+    wire signed [7:0] w_x_0_real;
+
+    wire signed [7:0] w_x_1_real;
+
+    wire signed [7:0] w_x_2_real;
+
+    wire signed [7:0] w_x_3_real;
+
+    wire signed [7:0] w_x_4_real;
+
+    wire signed [7:0] w_x_5_real;
+
+    wire signed [7:0] w_x_6_real;
+
+    wire signed [7:0] w_x_7_real;
 
 
     reg signed [31:0] Xoe_1_temp_real, Xoe_1_temp_imag;
@@ -395,27 +414,41 @@ always @(*) begin
 
 //2-point DFT calculation (we only find output which are only real)
 
-	x_0_real = (r_Xee_0_real + r_Xee_1_real) >>> 3; // >>>3 for 1/N
+    x_0_real = (r_Xee_0_real + r_Xee_1_real) >>> 3; // >>>3 for 1/N 
 
-	x_4_real = (r_Xee_0_real - r_Xee_1_real) >>> 3;
+    x_4_real = (r_Xee_0_real - r_Xee_1_real) >>> 3;
 
-	x_2_real = (r_Xeo_0_real - r_Xeo_1_imag) >>> 3;
+    x_2_real = (r_Xeo_0_real - r_Xeo_1_imag) >>> 3;
 
-	x_6_real = (r_Xeo_0_real + r_Xeo_1_imag) >>> 3;
+    x_6_real = (r_Xeo_0_real + r_Xeo_1_imag) >>> 3;
 
-	x_1_real = (r_Xoe_0_real + r_Xoe_1_real) >>> 3;
+    x_1_real = (r_Xoe_0_real + r_Xoe_1_real) >>> 3;
 
-	x_5_real = (r_Xoe_0_real - r_Xoe_1_real) >>> 3;  
+    x_5_real = (r_Xoe_0_real - r_Xoe_1_real) >>> 3;  
 
-	x_3_real = (r_Xoo_0_real - r_Xoo_1_imag) >>> 3; 
+    x_3_real = (r_Xoo_0_real - r_Xoo_1_imag) >>> 3; 
 
-	x_7_real = (r_Xoo_0_real + r_Xoo_1_imag) >>> 3; 
+    x_7_real = (r_Xoo_0_real + r_Xoo_1_imag) >>> 3;
+
+//scaling the output of ifft to 8bits per data
+
+    w_x_0_real = r_x_0_real [7:0];
+    w_x_1_real = r_x_1_real [7:0];
+    w_x_2_real = r_x_2_real [7:0];
+    w_x_3_real = r_x_3_real [7:0];
+    w_x_4_real = r_x_4_real [7:0];
+    w_x_5_real = r_x_5_real [7:0];
+    w_x_6_real = r_x_6_real [7:0];
+    w_x_7_real = r_x_7_real [7:0];
+
+    
+
 
  end
 
 assign m_axis_tvalid = d4_tvalid;
-assign m_axis_tdata = {r_x7_real, r_x6_real, r_x5_real, r_x4_real,
-		       r_x3_real, r_x2_real, r_x1_real, r_x0_real};    // need to make the output smaller and make it 64 bit
+assign m_axis_tdata = {w_x_7_real, w_x_6_real, w_x_5_real, w_x_4_real,
+w_x_3_real, w_x_2_real, w_x_1_real, w_x_0_real};
 
 
 endmodule
