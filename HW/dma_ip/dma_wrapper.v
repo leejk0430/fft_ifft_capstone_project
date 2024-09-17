@@ -287,4 +287,4 @@ wdma u_wdma(
 	.in_r_read					(in_r_read			)
 );
 
-endmodule : dma_wrapper
+endmodule
