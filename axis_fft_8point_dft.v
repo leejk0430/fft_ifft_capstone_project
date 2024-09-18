@@ -3,7 +3,7 @@
 `default_nettype none
 `timescale 1ps / 1ps
 
-module fft_8point_dft #(
+module axis_fft_8point_dft #(
   parameter integer C_AXIS_TDATA_WIDTH = 64, // Data width of input is 64
   parameter integer C_AXIS_TOUT_WIDTH = 512, // Data width of output is 512 if combined
   parameter integer C_AXIS_TID_WIDTH = 1,

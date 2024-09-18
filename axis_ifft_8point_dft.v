@@ -4,7 +4,7 @@
 `default_nettype none
 `timescale 1ps / 1ps
 
-module ifft_8point_dft #(
+module axis_ifft_8point_dft #(
     parameter integer C_AXIS_TDATA_WIDTH = 512,  // Data width of total input is 512 (32 bits for each eight of imag and real)
     parameter integer C_AXIS_TOUT_WIDTH = 64,   // Data width of total output is 64 (8 bits for each eight of real)
     parameter integer C_AXIS_TID_WIDTH = 1,
