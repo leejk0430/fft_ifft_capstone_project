@@ -389,7 +389,7 @@ always @(*) begin
 
     // W_8^-3 = cos(3*pi/4) + j*sin(3*pi/4) = -0.707 + j*0.707
     Xoo_1_temp_real = (r_Xo_3_real * -23170 + r_Xo_3_imag * -23170) >>> 15; 
-    Xoo_1_temp_imag = (r_Xo_3_real *  23170 + r_Xo_3_imag *  23170) >>> 15; 
+    Xoo_1_temp_imag = (r_Xo_3_real *  23170 + r_Xo_3_imag * -23170) >>> 15; 
 
 
     Xee_0_real = r_Xe_0_real + r_Xe_2_real;
