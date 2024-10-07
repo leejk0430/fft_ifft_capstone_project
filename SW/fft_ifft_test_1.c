@@ -66,15 +66,14 @@ void IFFT(s8* x, float* X_real, float* X_imag) {
     x[4] = (s8)((X_real[0] - X_real[1] + X_real[2] - X_real[3] + X_real[4] - X_real[5] + X_real[6] - X_real[7]) / 8.0);
     x[2] = (s8)((X_real[0] - X_imag[1] - X_real[2] + X_imag[3] + X_real[4] - X_imag[5] - X_real[6] + X_imag[7]) / 8.0);
     x[6] = (s8)((X_real[0] + X_imag[1] - X_real[2] - X_imag[3] + X_real[4] + X_imag[5] - X_real[6] - X_imag[7]) / 8.0);
-    x[1] = (s8)(((X_real[0] - X_imag[2] - X_real[4] + X_imag[6]) + ((X_real[1] - X_real[5] - X_imag[1] + X_imag[5] + X_real[7] - X_real[3] + X_imag[7] - X_imag[3]) * ROOT2)) / 8.0);
-    x[5] = (s8)(((X_real[0] - X_imag[2] - X_real[4] + X_imag[6]) + ((-X_real[1] + X_real[5] + X_imag[1] - X_imag[5] - X_real[7] + X_real[3] - X_imag[7] + X_imag[3]) * ROOT2)) / 8.0);
-    x[3] = (s8)(((X_real[0] + X_imag[2] - X_real[4] - X_imag[6]) + ((-X_real[1] + X_real[5] - X_imag[1] + X_imag[5] - X_real[7] + X_real[3] + X_imag[7] - X_imag[3]) * ROOT2)) / 8.0);
-    x[7] = (s8)(((X_real[0] + X_imag[2] - X_real[4] - X_imag[6]) + ((X_real[1] - X_real[5] + X_imag[1] - X_imag[5] + X_real[7] - X_real[3] - X_imag[7] + X_imag[3]) * ROOT2)) / 8.0);
+    x[1] = (s8)(((X_real[0] - X_imag[2] - X_real[4] + X_imag[6]) + ((X_real[1] - X_real[5] - X_imag[1] + X_imag[5] + X_real[7] - X_real[3] + X_imag[7] - X_imag[3]) * ROOT2_DIV_2)) / 8.0);
+    x[5] = (s8)(((X_real[0] - X_imag[2] - X_real[4] + X_imag[6]) + ((-X_real[1] + X_real[5] + X_imag[1] - X_imag[5] - X_real[7] + X_real[3] - X_imag[7] + X_imag[3]) * ROOT2_DIV_2)) / 8.0);
+    x[3] = (s8)(((X_real[0] + X_imag[2] - X_real[4] - X_imag[6]) + ((-X_real[1] + X_real[5] - X_imag[1] + X_imag[5] - X_real[7] + X_real[3] + X_imag[7] - X_imag[3]) * ROOT2_DIV_2)) / 8.0);
+    x[7] = (s8)(((X_real[0] + X_imag[2] - X_real[4] - X_imag[6]) + ((X_real[1] - X_real[5] + X_imag[1] - X_imag[5] + X_real[7] - X_real[3] - X_imag[7] + X_imag[3]) * ROOT2_DIV_2)) / 8.0);
 }
 
 int main() {
     u32 transfer_cnt;
-    u32 add_val;
     XTime tStart, tEnd;
     while (1) {
 ///////////////////////////////////////////////////////////////////////
@@ -113,8 +112,6 @@ int main() {
     	XTime_GetTime(&tEnd);
 		printf("HW Mem Copy function Time %.2f us.\n",
 		       1.0 * (tEnd - tStart) / (COUNTS_PER_SECOND/1000000));
-
-    	}
 ///////////////////////////////////////////////////////////////////////
 //////////// SW fft_ifft //////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
