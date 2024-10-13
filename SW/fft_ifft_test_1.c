@@ -100,7 +100,7 @@ int main() {
     		rdma_baseaddr[addr] = data;
     	}
     	Xil_DCacheDisable(); // flush to external mem.
-    	float transfer_bytes_display = transfer_cnt/1024/1024;
+    	float transfer_bytes_display = transfer_cnt/1024.0/1024.0;
     	printf("rdma_baseaddr : 0x%x\n", rdma_baseaddr);
     	printf("wdma_baseaddr : 0x%x\n", wdma_baseaddr);
     	printf("transfer_cnt size : %f Mbytes\n", transfer_bytes_display);
