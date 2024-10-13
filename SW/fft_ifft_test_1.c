@@ -79,9 +79,9 @@ int main() {
 ///////////////////////////////////////////////////////////////////////
 //////////// HW fft_ifft //////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
-    	printf("======= mem_copy_test ======\n");
+    	printf("======= (fft_ifft)_HW_SW_compare_test ======\n");
     	do{
-        	printf("plz input transfer_cnt\n");
+        	printf("plz input transfer_cnt (bytes)\n");
         	scanf("%u",&transfer_cnt);
     	}while( !( (0 < transfer_cnt) && (transfer_cnt%AXI_DATA_BYTE == 0) && (transfer_cnt <= 67108864) ) ); // 64 *(2^20) = 64 MBytes // max count 32-6 = 26. 2^26 = 64MBytes
 
@@ -110,7 +110,7 @@ int main() {
     	XTime_GetTime(&tStart);
     	test_hw_memcpy(wdma_baseaddr, rdma_baseaddr, transfer_cnt);
     	XTime_GetTime(&tEnd);
-		printf("HW Mem Copy function Time %.2f us.\n",
+		printf("HW fft_ifft function Time %.2f us.\n",
 		       1.0 * (tEnd - tStart) / (COUNTS_PER_SECOND/1000000));
 ///////////////////////////////////////////////////////////////////////
 //////////// SW fft_ifft //////////////////////////////////////////////
